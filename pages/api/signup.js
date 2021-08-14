@@ -1,13 +1,11 @@
-import { PrismaClient } from '@prisma/client'
-import { sign } from 'jsonwebtoken'
 import { createAccessToken, createRefreshToken, sendRefreshToken } from '../../functions/auth'
-const prisma = new PrismaClient()
+import Prisma from '../../functions/initPrisma'
 
 export default async (req, res) => {
     const {email, firstName, secondName, password} = JSON.parse(req.body)
     
     //checking if someone have used the email
-    const checkIfExist = await prisma.user.findUnique({
+    const checkIfExist = await Prisma.user.findUnique({
         where: {
             email
         }
@@ -15,7 +13,7 @@ export default async (req, res) => {
 
     if(checkIfExist) return res.status(409).send()
 
-    const user = await prisma.user.create({
+    const user = await Prisma.user.create({
         data: {
             email,
             firstName,

@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client'
+import Prisma from '../../functions/initPrisma'
 import {createAccessToken, createRefreshToken, sendRefreshToken} from '../../functions/auth'
-const prisma = new PrismaClient()
+
 
 export default async (req, res) => {
     if(req.method === 'POST') {
         const {email, password} = JSON.parse(req.body)
-        const user = await prisma.user.findUnique({
+        const user = await Prisma.user.findUnique({
             where: {
                 email
             }

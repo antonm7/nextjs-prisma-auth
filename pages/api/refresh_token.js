@@ -1,9 +1,8 @@
-import { PrismaClient } from '@prisma/client'
 import { verify } from 'jsonwebtoken'
 import {createAccessToken, sendRefreshToken, createRefreshToken} from '../../functions/auth'
 import cookie from 'cookie'
+import Prisma from '../../functions/initPrisma'
 
-const prisma = new PrismaClient()
 
 export default async function refresh_token(req, res) {
     if (req.method === 'POST') {
@@ -17,7 +16,7 @@ export default async function refresh_token(req, res) {
         try {
             payload = verify(token, process.env.REFRESH_TOKEN_SECRET)
             
-            const user = await prisma.user.findUnique({
+            const user = await Prisma.user.findUnique({
                 where: {
                     id: payload.userId
                 },
